@@ -1,0 +1,3 @@
+var Random = function(seed) {
+
+}

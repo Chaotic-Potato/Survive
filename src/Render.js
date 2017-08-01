@@ -3,7 +3,6 @@ var Render = {
 	tileWidth: 32,
 	imgs: [],
 	start: new Date().getTime(),
-	frames: 0,
 	getWidth: function() {
 		return window.innerWidth
 	},
@@ -15,11 +14,13 @@ var Render = {
 		get("game").height = $R.getHeight()
 	},
 	frame: function() {
-		$R.frames++
-		setTimeout(function(){$R.frames--}, 1000)
+		$R.blocks = []
 		$R.clear()
 		$R.drawTiles()
+		$R.blocks.sort(function(a, b){return (a.y != b.y ? a.y > b.y : (a.size != b.size ? a.size > b.size : a.x > b.x)) * 2 - 1})
+		$R.blocks.filter(function(e){return e.y < $P.y}).forEach(function(e){$R.drawBlock(e.x, e.y)})
 		$R.drawPlayer()
+		$R.blocks.filter(function(e){return e.y >= $P.y}).forEach(function(e){$R.drawBlock(e.x, e.y)})
 		$R.drawHUD()
 		$R.drawHotbar()
 		window.requestAnimationFrame($R.frame)
@@ -50,8 +51,9 @@ var Render = {
 	},
 	drawBlock: function(x, y) {
 		let tile = $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)]
-		$R.drawImage("block/" + tile.block.texture, ($R.getWidth() - $R.tileWidth) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - $R.tileWidth) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth * tile.block.size, $R.tileWidth * tile.block.size)
-	},
+		let w = $R.tileWidth * tile.block.size
+		$R.drawImage("block/" + tile.block.texture, ($R.getWidth() - w) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - w) / 2 + ($R.tileWidth * (y - $P.y)), w, w)
+		},
 	drawTiles: function() {
 		let w = Math.ceil($R.getWidth() / $R.tileWidth / 2 + 0.5) + 1
 		let h = Math.ceil($R.getHeight() / $R.tileWidth / 2 + 0.5) + 1
@@ -63,7 +65,7 @@ var Render = {
 				let tile = $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)]
 				$R.drawTile(tile, x, y)
 				if (tile.block) {
-					blocks.push({
+					$R.blocks.push({
 						x: x,
 						y: y,
 						size: tile.block.size
@@ -71,8 +73,6 @@ var Render = {
 				}
 			}
 		}
-		blocks.sort(function(a, b){return (a.size != b.size ? a.size > b.size : (a.y != b.y ? a.y > b.y : a.x > b.x)) * 2 - 1})
-		blocks.forEach(function(e){$R.drawBlock(e.x, e.y)})
 	},
 	drawPlayer: function() {
 		$R.drawImage("game/player", ($R.getWidth() - $R.tileWidth) / 2, ($R.getHeight() - $R.tileWidth) / 2, $R.tileWidth, $R.tileWidth)

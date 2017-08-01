@@ -32,8 +32,18 @@ var Player = {
 			}
 		}
 		let mult = $P.getSpeed() / TICK_RATE / dist(dir[0], dir[1])
-		$P.x += mult * dir[0] || 0
-		$P.y += mult * dir[1] || 0
+		$P.x = $P.x + (mult * dir[0] || 0)
+		$P.y = $P.y + (mult * dir[1] || 0)
+		if (($G.map.tiles[mod(Math.round($P.x), $G.map.width)][mod(Math.round($P.y), $G.map.height)].block || {clip: false}).clip) {
+			let dx = ($P.x % 1) - 0.5
+			let dy = ($P.y % 1) - 0.5
+			if (dx > dy) {
+				$P.y = Math.floor($P.y) + 0.5
+			}
+			else {
+				$P.x = Math.floor($P.x) + 0.5
+			}
+		}
 	},
 	getSpeed: function() {
 		return 5

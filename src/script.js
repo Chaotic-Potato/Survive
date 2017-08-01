@@ -9,3 +9,7 @@ function mod(n, d) {
 function intrp(a, b, f){
 	return a + (6 * Math.pow(f, 5) - 15 * Math.pow(f, 4) + 10 * Math.pow(f, 3)) * (b - a)
 }
+
+function percent(n) {
+	return Math.round(n * 100) + "%"
+}

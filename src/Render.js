@@ -15,6 +15,7 @@ var Render = {
 		$R.clear()
 		$R.drawTiles()
 		$R.drawPlayer()
+		$R.drawHUD()
 		window.requestAnimationFrame($R.frame)
 	},
 	clear: function() {
@@ -24,6 +25,16 @@ var Render = {
 		var img = new Image()
 		img.src = "imgs/" + src + ".png"
 		$R.ctx.drawImage(img, x, y, w, h)
+	},
+	drawRect: function(x, y, w, h, c) {
+		$R.ctx.fillStyle = c 
+		$R.ctx.fillRect(x, y, w, h)	
+	},
+	drawText: function(s, x, y, c, f, a) {
+		$R.ctx.font = f
+		$R.ctx.textAlign = a
+		$R.ctx.fillStyle = c
+		$R.ctx.fillText(s, x, y)	
 	},
 	drawTile: function(x, y) {
 		$R.drawImage("tile/" + $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)].texture, ($R.getWidth() - $R.tileWidth) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - $R.tileWidth) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth, $R.tileWidth)
@@ -39,6 +50,26 @@ var Render = {
 	},
 	drawPlayer: function() {
 		$R.drawImage("game/player", ($R.getWidth() - $R.tileWidth) / 2, ($R.getHeight() - $R.tileWidth) / 2, $R.tileWidth, $R.tileWidth)
+	},
+	drawBar: function(x, y, c, f, t) {
+		$R.drawRect(x, y, 272, 48, "#555")
+		$R.drawRect(x + 4, y + 4, 264, 40, "#888")
+		$R.drawRect(x + 8, y + 8, 256 * f, 32, c)
+		$R.drawRect(x + 264, y + 8, -256 * (1 - f), 32, "#555")
+		$R.drawText(t + ": " + percent(f), x + 136, y + 32, "#FFF", "24px Monospace", "center")
+	},
+	drawHUD: function() {
+		let colors = {
+			rest: "#3C3",
+			h2o: "#33C",
+			food: "#C83",
+			hp: "#C33"
+		}
+		let c = 0
+		for (i in colors) {
+			$R.drawBar(16, $R.getHeight() - 64 * (c + 1), colors[i], $P.stats[i], i.toUpperCase())
+			c++
+		}
 	}
 }
 

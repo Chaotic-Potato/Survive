@@ -3,13 +3,13 @@ var Game = {
 	init: function() {
 		$G.map = new Map(12345, 1024, 1024, 32)	
 		$R.frame()
+		$G.loop = setInterval($G.tick, 1000 / TICK_RATE)
+	},
+	tick: function() {
+		$P.tick()
 	},
 	keyDown: function(e) {
 		let key = {
-			w: function(){$P.move(false, -1)},
-			s: function(){$P.move(false, 1)},
-			a: function(){$P.move(true, -1)},
-			d: function(){$P.move(true, 1)}
 		}
 		if (key[e.key] && !$G.keys[e.key]) {
 			key[e.key]()

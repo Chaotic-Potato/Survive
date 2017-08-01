@@ -7,6 +7,7 @@ var Player = {
 		h2o: 1,
 		rest: 1
 	},
+	selected: null,
 	inventory: (function(w, h){
 		let out = [[]]
 		for (let i = 0; i < w; i++) {
@@ -16,7 +17,7 @@ var Player = {
 			}
 		}
 		return out
-	})(1, 5),
+	})(4, 5),
 	tick: function() {
 		let dir = [0, 0]
 		let keys = {
@@ -70,13 +71,67 @@ var Player = {
 		}
 		$P.drop(e)
 	},
-	drop: function(e) {
-		console.log(e)
+	dropped: function(x, y) {
+		if ($P.selected && $P.selected[2] == 0) {
+			$P.drop($P.inventory[$P.selected[0]][$P.selected[1]])
+			$P.inventory[$P.selected[0]][$P.selected[1]] = null
+		}	
 	},
-	interact(x, y) {
+	drop: function(e) {
+		$G.map.tiles[mod(Math.round($P.x), $G.map.width)][mod(Math.round($P.y), $G.map.height)].drop(e)
+	},
+	interact: function(x, y) {
 		if (dist(x - $P.x, y - $P.y) <= 5) {
 			$G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)].interact()
 		}		
+	},
+	swap: function(x0, y0, x1, y1) {
+		if (x0 == x1 && y0 == y1) {
+			return
+		}
+		if ($P.inventory[x0][y0] && $P.inventory[x0][y0].same($P.inventory[x1][y1])) {
+			let sum = $P.inventory[x0][y0].amount + $P.inventory[x1][y1].amount
+			$P.inventory[x0][y0].amount = Math.min(sum, $P.inventory[x0][y0].maxAmount)
+			$P.inventory[x1][y1].amount = sum - $P.inventory[x1][y1].maxAmount
+			if ($P.inventory[x1][y1].amount <= 0) {
+				$P.inventory[x1][y1] = null
+			}
+		}
+		else {
+			let temp = $P.inventory[x0][y0]
+			$P.inventory[x0][y0] = $P.inventory[x1][y1]
+			$P.inventory[x1][y1] = temp
+		}
+	},
+	split: function(x0, y0, x1, y1) {
+		if (x0 == x1 && y0 == y1) {
+			return
+		}
+		if ($P.inventory[x0][y0] || !$P.inventory[x1][y1]) {
+			$P.swap(x0, y0, x1, y1)
+		}
+		else {
+			$P.inventory[x0][y0] = clone($P.inventory[x1][y1])
+			$P.inventory[x0][y0].amount = Math.floor($P.inventory[x0][y0].amount / 2)
+			$P.inventory[x1][y1].amount = Math.ceil($P.inventory[x1][y1].amount / 2)
+			if ($P.inventory[x0][y0].amount <= 0) {
+				$P.inventory[x0][y0] = null
+			}
+		}
+	},
+	invMDown: function(x, y, c) {
+		$P.selected = [x, y, c]	
+	},
+	invMUp: function(x, y) {
+		if ($P.selected) {
+			switch ($P.selected[2]) {
+				case 0:
+					$P.swap(x, y, $P.selected[0], $P.selected[1])
+					break
+				case 1:
+					$P.split(x, y, $P.selected[0], $P.selected[1])
+			}
+		}
 	},
 	getSpeed: function() {
 		return ($G.map.tiles[mod(Math.round($P.x), $G.map.width)][mod(Math.round($P.y), $G.map.height)].texture == "water" ? 2 : 5)

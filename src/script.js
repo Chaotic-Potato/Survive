@@ -19,3 +19,11 @@ function percent(n) {
 function dist(x, y) {
 	return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
 }
+
+function clone(o) {
+	let out = []
+	for (i in o) {
+		out[i] = o[i]
+	}
+	return out
+}

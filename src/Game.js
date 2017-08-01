@@ -1,7 +1,7 @@
 var Game = {
 	keys: {},
 	init: function() {
-		$G.map = new Map(0, 256, 256, 8)	
+		$G.map = new Map(12345, 1024, 1024, 32)	
 		$R.frame()
 	},
 	keyDown: function(e) {

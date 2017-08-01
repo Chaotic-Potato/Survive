@@ -1,6 +1,6 @@
 var Render = {
 	ctx: get("game").getContext("2d"),
-	tileWidth: 64,
+	tileWidth: 32,
 	getWidth: function() {
 		return window.innerWidth
 	},
@@ -45,3 +45,4 @@ var Render = {
 var $R = Render
 window.onresize = $R.resize
 $R.resize()
+$R.ctx.imageSmoothingEnabled = false

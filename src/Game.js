@@ -40,6 +40,7 @@ var Game = {
 				return
 			}
 		}
+		$P.dropped()
 	}
 }
 

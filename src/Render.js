@@ -22,13 +22,16 @@ var Render = {
 	},
 	frame: function() {
 		$R.blocks = []
+		$R.items = []
 		$R.clickboxes = []
 		$R.clear()
 		$R.drawTiles()
 		$R.blocks.sort(function(a, b){return (a.y != b.y ? a.y > b.y : (a.size != b.size ? a.size > b.size : a.x > b.x)) * 2 - 1})
 		$R.blocks.filter(function(e){return e.y < $P.y}).forEach(function(e){$R.drawBlock(e.x, e.y)})
+		$R.items.filter(function(e){return e.y < $P.y}).forEach(function(e){$R.drawItem(e.x, e.y)})
 		$R.drawPlayer()
 		$R.blocks.filter(function(e){return e.y >= $P.y}).forEach(function(e){$R.drawBlock(e.x, e.y)})
+		$R.items.filter(function(e){return e.y >= $P.y}).forEach(function(e){$R.drawItem(e.x, e.y)})
 		$R.drawHUD()
 		$R.drawHotbar()
 		if ($R.menu != null) {
@@ -76,11 +79,14 @@ var Render = {
 	drawTile: function(t, x, y) {
 		$R.drawImage("tile/" + t.texture, ($R.getWidth() - $R.tileWidth) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - $R.tileWidth) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth, $R.tileWidth)
 	},
+	drawItem: function(x, y) {
+		$R.drawImage("item/" + $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)].item.texture, ($R.getWidth() - ($R.tileWidth / 2)) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - ($R.tileWidth / 2)) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth / 2, $R.tileWidth / 2)
+	}, 
 	drawBlock: function(x, y) {
 		let tile = $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)]
 		let w = $R.tileWidth * tile.block.size
 		$R.drawImage("block/" + tile.block.texture, ($R.getWidth() - w) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - w) / 2 + ($R.tileWidth * (y - $P.y)), w, w)
-		},
+	},
 	drawTiles: function() {
 		let w = Math.ceil($R.getWidth() / $R.tileWidth / 2 + 0.5) + 1
 		let h = Math.ceil($R.getHeight() / $R.tileWidth / 2 + 0.5) + 1
@@ -91,6 +97,12 @@ var Render = {
 				let y = Math.round($P.y) + j
 				let tile = $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)]
 				$R.drawTile(tile, x, y)
+				if (tile.item) {
+					$R.items.push({
+						x: x,
+						y: y
+					})
+				}
 				if (tile.block) {
 					$R.blocks.push({
 						x: x,

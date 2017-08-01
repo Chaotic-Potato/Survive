@@ -71,8 +71,14 @@ var Player = {
 		}
 		$P.drop(e)
 	},
+	dropped: function(x, y) {
+		if ($P.selected && $P.selected[2] == 0) {
+			$P.drop($P.inventory[$P.selected[0]][$P.selected[1]])
+			$P.inventory[$P.selected[0]][$P.selected[1]] = null
+		}	
+	},
 	drop: function(e) {
-		console.log(e)
+		$G.map.tiles[mod(Math.round($P.x), $G.map.width)][mod(Math.round($P.y), $G.map.height)].drop(e)
 	},
 	interact: function(x, y) {
 		if (dist(x - $P.x, y - $P.y) <= 5) {
@@ -108,6 +114,9 @@ var Player = {
 			$P.inventory[x0][y0] = clone($P.inventory[x1][y1])
 			$P.inventory[x0][y0].amount = Math.floor($P.inventory[x0][y0].amount / 2)
 			$P.inventory[x1][y1].amount = Math.ceil($P.inventory[x1][y1].amount / 2)
+			if ($P.inventory[x0][y0].amount <= 0) {
+				$P.inventory[x0][y0] = null
+			}
 		}
 	},
 	invMDown: function(x, y, c) {

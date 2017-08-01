@@ -16,7 +16,7 @@ var Player = {
 			}
 		}
 		return out
-	})(1, 5),
+	})(4, 5),
 	tick: function() {
 		let dir = [0, 0]
 		let keys = {

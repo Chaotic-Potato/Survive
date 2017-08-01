@@ -3,6 +3,10 @@ var Render = {
 	tileWidth: 32,
 	imgs: [],
 	start: new Date().getTime(),
+	menu: null,
+	menus: {
+		inventory: "drawInventory"
+	},
 	getWidth: function() {
 		return window.innerWidth
 	},
@@ -12,9 +16,13 @@ var Render = {
 	resize: function() {
 		get("game").width = $R.getWidth()
 		get("game").height = $R.getHeight()
+		$R.ctx.imageSmoothingEnabled = false
+		$R.ctx.webkitImageSmoothingEnabled = false
+		$R.ctx.mozImageSmoothingEnabled = false
 	},
 	frame: function() {
 		$R.blocks = []
+		$R.clickboxes = []
 		$R.clear()
 		$R.drawTiles()
 		$R.blocks.sort(function(a, b){return (a.y != b.y ? a.y > b.y : (a.size != b.size ? a.size > b.size : a.x > b.x)) * 2 - 1})
@@ -23,7 +31,26 @@ var Render = {
 		$R.blocks.filter(function(e){return e.y >= $P.y}).forEach(function(e){$R.drawBlock(e.x, e.y)})
 		$R.drawHUD()
 		$R.drawHotbar()
+		if ($R.menu != null) {
+			$R[$R.menu.func]()
+		}
 		window.requestAnimationFrame($R.frame)
+	},
+	loadMenu: function(name) {
+		if ($R.menus[name]) {
+			$R.menu = {
+				name: name,
+				func: $R.menus[name]
+			}
+		}
+	},
+	toggleMenu: function(name) {
+		if (!$R.menu || $R.menu.name != name) {
+			$R.loadMenu(name)
+		}	
+		else {
+			$R.menu = null
+		}
 	},
 	clear: function() {
 		$R.ctx.clearRect(0, 0, $R.getWidth(), $R.getHeight())
@@ -112,10 +139,16 @@ var Render = {
 			$R.drawBar((c % 2 ? 16 : $R.getWidth() - 288), $R.getHeight() - 64 * (Math.floor(c / 2) + 1), colors[i], $P.stats[i], i.toUpperCase())
 			c++
 		}
+	},
+	drawInventory: function() {
+		for (let i = 1; i < $P.inventory.length; i++) {
+			for (j in $P.inventory[i]) {
+				$R.drawItemSlot($R.getWidth() / 2 + ((j - ($P.inventory[0].length / 2)) * 88), 16 + (i - 1) * 88, $P.inventory[i][j])
+			}
+		}
 	}
 }
 
 var $R = Render
 window.onresize = $R.resize
 $R.resize()
-$R.ctx.imageSmoothingEnabled = false

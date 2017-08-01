@@ -28,10 +28,10 @@ var Render = {
 		$R.drawTiles()
 		$R.blocks.sort(function(a, b){return (a.y != b.y ? a.y > b.y : (a.size != b.size ? a.size > b.size : a.x > b.x)) * 2 - 1})
 		$R.blocks.filter(function(e){return e.y < $P.y}).forEach(function(e){$R.drawBlock(e.x, e.y)})
-		$R.items.filter(function(e){return e.y < $P.y}).forEach(function(e){$R.drawItem(e.x, e.y)})
+		$R.items.filter(function(e){return e.y < $P.y}).forEach(function(e){$R.drawGroundItem(e.x, e.y)})
 		$R.drawPlayer()
 		$R.blocks.filter(function(e){return e.y >= $P.y}).forEach(function(e){$R.drawBlock(e.x, e.y)})
-		$R.items.filter(function(e){return e.y >= $P.y}).forEach(function(e){$R.drawItem(e.x, e.y)})
+		$R.items.filter(function(e){return e.y >= $P.y}).forEach(function(e){$R.drawGroundItem(e.x, e.y)})
 		$R.drawHUD()
 		$R.drawHotbar()
 		if ($R.menu != null) {
@@ -79,8 +79,8 @@ var Render = {
 	drawTile: function(t, x, y) {
 		$R.drawImage("tile/" + t.texture, ($R.getWidth() - $R.tileWidth) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - $R.tileWidth) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth, $R.tileWidth)
 	},
-	drawItem: function(x, y) {
-		$R.drawImage("item/" + $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)].item.texture, ($R.getWidth() - ($R.tileWidth / 2)) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - ($R.tileWidth / 2)) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth / 2, $R.tileWidth / 2)
+	drawGroundItem: function(x, y) {
+		$R.drawImage("item/" + $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)].item.name, ($R.getWidth() - ($R.tileWidth / 2)) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - ($R.tileWidth / 2)) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth / 2, $R.tileWidth / 2)
 	}, 
 	drawBlock: function(x, y) {
 		let tile = $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)]
@@ -123,16 +123,20 @@ var Render = {
 		$R.drawRect(x + 264, y + 8, -256 * (1 - f), 32, "#555")
 		$R.drawText(t + ": " + percent(f), x + 136, y + 32, "#FFF", "24px Monospace", "center")
 	},
+	drawItem: function(item, x, y, w) {
+		if (item == null) {
+			return
+		}
+		$R.drawImage("item/" + item.name, x, y, w, w)
+		if (item.amount > 1) {
+			$R.drawText(item.amount, x + (w * 0.9375), y + (w * 0.9375), "#FFF", (w / 2) + "px Monospace", "right")
+		}
+	},
 	drawItemSlot: function(x, y, item) {
 		$R.drawRect(x, y, 80, 80, "#555")
 		$R.drawRect(x + 4, y + 4, 72, 72, "#888")
 		$R.drawRect(x + 8, y + 8, 64, 64, "#777")
-		if (item != null) {
-			$R.drawImage("item/" + item.texture, x + 8, y + 8, 64, 64)
-			if (item.amount > 1) {
-				$R.drawText(item.amount, x + 68, y + 68, "#FFF", "16px Monospace", "right")
-			}
-		}
+		$R.drawItem(item, x + 8, y + 8, 64)
 	},
 	drawHotbar: function() {
 		for (i in $P.inventory[0]) {
@@ -172,6 +176,30 @@ var Render = {
 						$P.invMUp(m, n)	
 					}
 				})
+			}
+		}
+		let recipes = $P.getCanCraft()
+		for (let i in recipes) {
+			let x = 16
+			let y = 16 + i * 40
+			const m = i
+			$R.drawItem(recipes[i].out, x, y, 32)
+			$R.clickboxes.push({
+				x: x,
+				y: y,
+				w: 32,
+				h: 32,
+				df: function() {
+					$P.craft(recipes[m])	
+				}
+				uf: function(){}
+			})
+			$R.drawText(":", 56, 40 + i * 40, "#FFF", "32px Monospace", "center")
+			let z = 0
+			for (let j in recipes[i].ings) {
+				console.log()
+				$R.drawItem(new Item(j, recipes[i].ings[j]), 64 + z * 40, 16 + i * 40, 32)
+				z++
 			}
 		}
 	}

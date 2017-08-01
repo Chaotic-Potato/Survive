@@ -135,6 +135,45 @@ var Player = {
 	},
 	getSpeed: function() {
 		return ($G.map.tiles[mod(Math.round($P.x), $G.map.width)][mod(Math.round($P.y), $G.map.height)].texture == "water" ? 2 : 5)
+	},
+	getIngs: function(){
+		let out = {}
+		for (let i in $P.inventory) {
+			for (let j in $P.inventory[i]) {
+				if ($P.inventory[i][j]) {
+					if (out[$P.inventory[i][j].name]) {
+						out[$P.inventory[i][j].name] += $P.inventory[i][j].amount
+					}
+					else {
+						out[$P.inventory[i][j].name] = $P.inventory[i][j].amount
+					}
+				}
+			}
+		}
+		return out
+	},
+	getCanCraft: function(r) {
+		let ings = $P.getIngs()
+		let tools = ["hand"]
+		return Recipes.filter(function(e){return e.check(ings, tools)})
+	},
+	craft: function(r) {
+		let ings = clone(r.ings)
+		for (let i = $P.inventory.length - 1; i >= 0; i--) {
+			for (let j = $P.inventory[0].length - 1; j >= 0; j--) {
+				if ($P.inventory[i][j] && ings[$P.inventory[i][j].name]) {
+					if (ings[$P.inventory[i][j].name] < $P.inventory[i][j].amount) {
+						$P.inventory[i][j].amount -= ings[$P.inventory[i][j].name]
+						ings[$P.inventory[i][j].name] = 0
+					}
+					else {
+						ings[$P.inventory[i][j].name] -= $P.inventory[i][j].amount
+						$P.inventory[i][j] = null
+					}
+				}
+			}
+		}
+		$P.pickUp(r.out)
 	}
 }
 

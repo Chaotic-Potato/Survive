@@ -1,5 +1,5 @@
-var Item = function(texture, amount, maxAmount) {
-	this.texture = texture
+var Item = function(name, amount, maxAmount) {
+	this.name = name
 	this.amount = amount
 	this.maxAmount = maxAmount
 }

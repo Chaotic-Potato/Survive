@@ -1,7 +1,8 @@
-var Item = function(name, amount, maxAmount) {
+var Item = function(name, amount, maxAmount, block) {
 	this.name = name
 	this.amount = amount
 	this.maxAmount = maxAmount
+	this.block = block
 }
 
 Item.prototype = {

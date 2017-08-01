@@ -8,6 +8,7 @@ var Player = {
 		rest: 1
 	},
 	selected: null,
+	hotSelect: 0,
 	inventory: (function(w, h){
 		let out = [[]]
 		for (let i = 0; i < w; i++) {
@@ -80,9 +81,14 @@ var Player = {
 	drop: function(e) {
 		$G.map.tiles[mod(Math.round($P.x), $G.map.width)][mod(Math.round($P.y), $G.map.height)].drop(e)
 	},
-	interact: function(x, y) {
+	interact: function(x, y, b) {
 		if (dist(x - $P.x, y - $P.y) <= 5) {
-			$G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)].interact()
+			if ($G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)].interact(b, $P.inventory[0][$P.hotSelect])) {
+				$P.inventory[0][$P.hotSelect].amount--
+				if ($P.inventory[0][$P.hotSelect].amount <= 0) {
+					$P.inventory[0][$P.hotSelect] = null
+				}
+			}
 		}		
 	},
 	swap: function(x0, y0, x1, y1) {
@@ -128,7 +134,7 @@ var Player = {
 				case 0:
 					$P.swap(x, y, $P.selected[0], $P.selected[1])
 					break
-				case 1:
+				case 2:
 					$P.split(x, y, $P.selected[0], $P.selected[1])
 			}
 		}
@@ -173,7 +179,7 @@ var Player = {
 				}
 			}
 		}
-		$P.pickUp(r.out)
+		$P.pickUp(clone(r.out))
 	}
 }
 

@@ -12,6 +12,10 @@ var Game = {
 		let key = {
 			i: function(){$R.toggleMenu("inventory")}
 		}
+		for (i in $P.inventory[0]) {
+			const n = i
+			key[parseInt(i) + 1] = function(){$P.hotSelect = n}
+		}
 		if (key[e.key] && !$G.keys[e.key]) {
 			key[e.key]()
 		}
@@ -29,7 +33,7 @@ var Game = {
 				return
 			}
 		}
-		$P.interact(Math.round($P.x + (e.x - $R.getWidth() / 2) / $R.tileWidth), Math.round($P.y + (e.y - $R.getHeight() / 2) / $R.tileWidth))
+		$P.interact(Math.round($P.x + (e.x - $R.getWidth() / 2) / $R.tileWidth), Math.round($P.y + (e.y - $R.getHeight() / 2) / $R.tileWidth), e.button)
 	},
 	mouseUp: function(e) {
 		$G.selected = null
@@ -49,4 +53,5 @@ document.onkeydown = $G.keyDown
 document.onkeyup = $G.keyUp
 document.onmousedown = $G.mouseDown
 document.onmouseup = $G.mouseUp
+document.oncontextmenu = function(){return false}
 $G.init()

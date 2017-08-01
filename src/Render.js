@@ -46,7 +46,14 @@ var Render = {
 		$R.ctx.fillText(s, x, y)	
 	},
 	drawTile: function(x, y) {
-		$R.drawImage("tile/" + $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)].texture, ($R.getWidth() - $R.tileWidth) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - $R.tileWidth) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth, $R.tileWidth)
+		let tile = $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)]
+		let src = ["tile/" + tile.texture]
+		if (tile.block) {
+			src.push("block/" + tile.block.texture)
+		}
+		for (i in src) {
+			$R.drawImage(src[i], ($R.getWidth() - $R.tileWidth) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - $R.tileWidth) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth, $R.tileWidth)
+		}
 	},
 	drawTiles: function() {
 		let w = Math.ceil($R.getWidth() / $R.tileWidth / 2 + 0.5)

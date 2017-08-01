@@ -26,14 +26,19 @@ var Tile = function(x, y, alt, rng, resourceRates) {
 }
 
 Tile.prototype = {
-	interact: function() {
+	interact: function(b, i) {
 		if (this.item) {
 			$P.pickUp(this.item)
 			this.item = null
 		}
 		else if (this.block) {
-			this.block.interact()
+			this.block.interact(b)
 		}
+		else if (i && i.block) {
+			this.block = Blocks[i.block[0]][i.block[1]].get(this)
+			return true
+		}
+		return false
 	},
 	drop: function(e) {
 		let a = 0

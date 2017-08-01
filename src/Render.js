@@ -132,15 +132,15 @@ var Render = {
 			$R.drawText(item.amount, x + (w * 0.9375), y + (w * 0.9375), "#FFF", (w / 2) + "px Monospace", "right")
 		}
 	},
-	drawItemSlot: function(x, y, item) {
-		$R.drawRect(x, y, 80, 80, "#555")
+	drawItemSlot: function(x, y, item, c) {
+		$R.drawRect(x, y, 80, 80, c || "#555")
 		$R.drawRect(x + 4, y + 4, 72, 72, "#888")
 		$R.drawRect(x + 8, y + 8, 64, 64, "#777")
 		$R.drawItem(item, x + 8, y + 8, 64)
 	},
 	drawHotbar: function() {
 		for (i in $P.inventory[0]) {
-			$R.drawItemSlot($R.getWidth() / 2 + ((i - ($P.inventory[0].length / 2)) * 88), $R.getHeight() - 96, $P.inventory[0][i])
+			$R.drawItemSlot($R.getWidth() / 2 + ((i - ($P.inventory[0].length / 2)) * 88), $R.getHeight() - 96, $P.inventory[0][i], (i == $P.hotSelect ? "#55A" : null))
 		}
 	},
 	drawHUD: function() {
@@ -191,7 +191,7 @@ var Render = {
 				h: 32,
 				df: function() {
 					$P.craft(recipes[m])	
-				}
+				},
 				uf: function(){}
 			})
 			$R.drawText(":", 56, 40 + i * 40, "#FFF", "32px Monospace", "center")

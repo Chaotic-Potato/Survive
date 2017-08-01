@@ -8,7 +8,7 @@ var Items = {
 		Wood: function(amount){return new Item("wood", amount, 500)},
 	},
 	Utility: {
-		Furance: function(amount){return new Item("furnace", amount, 1, ["Utility", "Furnace"])},
+		Furnace: function(amount){return new Item("furnace", amount, 1, ["Utility", "Furnace"])},
 		Workbench: function(amount){return new Item("workbench", amount, 1, ["Utility", "Workbench"])}
 	}
 }

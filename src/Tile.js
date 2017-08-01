@@ -14,7 +14,7 @@ var Tile = function(x, y, alt, rng, resourceRates) {
 	let resources = []
 	let resource = null
 	for (i in resourceRates) {
-		if (rng.get() * 300 < resourceRates[i] * Blocks.Resource[i].rate && this.texture != "water") {
+		if (rng.get() * 300 < resourceRates[i] * Blocks.Resource[i].rate && this.texture == "grass") {
 			resources.push(i)
 		}
 	}

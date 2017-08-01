@@ -46,7 +46,7 @@ var Player = {
 		}
 	},
 	getSpeed: function() {
-		return 5
+		return ($G.map.tiles[mod(Math.round($P.x), $G.map.width)][mod(Math.round($P.y), $G.map.height)].texture == "water" ? 2 : 5)
 	}
 }
 

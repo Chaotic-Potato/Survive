@@ -45,24 +45,34 @@ var Render = {
 		$R.ctx.fillStyle = c
 		$R.ctx.fillText(s, x, y)	
 	},
-	drawTile: function(x, y) {
+	drawTile: function(t, x, y) {
+		$R.drawImage("tile/" + t.texture, ($R.getWidth() - $R.tileWidth) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - $R.tileWidth) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth, $R.tileWidth)
+	},
+	drawBlock: function(x, y) {
 		let tile = $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)]
-		let src = ["tile/" + tile.texture]
-		if (tile.block) {
-			src.push("block/" + tile.block.texture)
-		}
-		for (i in src) {
-			$R.drawImage(src[i], ($R.getWidth() - $R.tileWidth) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - $R.tileWidth) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth, $R.tileWidth)
-		}
+		$R.drawImage("block/" + tile.block.texture, ($R.getWidth() - $R.tileWidth) / 2 + ($R.tileWidth * (x - $P.x)), ($R.getHeight() - $R.tileWidth) / 2 + ($R.tileWidth * (y - $P.y)), $R.tileWidth * tile.block.size, $R.tileWidth * tile.block.size)
 	},
 	drawTiles: function() {
-		let w = Math.ceil($R.getWidth() / $R.tileWidth / 2 + 0.5)
-		let h = Math.ceil($R.getHeight() / $R.tileWidth / 2 + 0.5)
+		let w = Math.ceil($R.getWidth() / $R.tileWidth / 2 + 0.5) + 1
+		let h = Math.ceil($R.getHeight() / $R.tileWidth / 2 + 0.5) + 1
+		let blocks = []
 		for (let i = -w; i <= w; i++) {
 			for (let j = -h; j <= h; j++) {
-				$R.drawTile(Math.round($P.x) + i, Math.round($P.y) + j)
+				let x = Math.round($P.x) + i
+				let y = Math.round($P.y) + j
+				let tile = $G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)]
+				$R.drawTile(tile, x, y)
+				if (tile.block) {
+					blocks.push({
+						x: x,
+						y: y,
+						size: tile.block.size
+					})
+				}
 			}
 		}
+		blocks.sort(function(a, b){return (a.size != b.size ? a.size > b.size : (a.y != b.y ? a.y > b.y : a.x > b.x)) * 2 - 1})
+		blocks.forEach(function(e){$R.drawBlock(e.x, e.y)})
 	},
 	drawPlayer: function() {
 		$R.drawImage("game/player", ($R.getWidth() - $R.tileWidth) / 2, ($R.getHeight() - $R.tileWidth) / 2, $R.tileWidth, $R.tileWidth)

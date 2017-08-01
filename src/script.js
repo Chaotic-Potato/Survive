@@ -1,3 +1,5 @@
+const TICK_RATE = 60
+
 function get(d) {
 	return document.getElementById(d)
 }
@@ -12,4 +14,8 @@ function intrp(a, b, f){
 
 function percent(n) {
 	return Math.round(n * 100) + "%"
+}
+
+function dist(x, y) {
+	return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
 }

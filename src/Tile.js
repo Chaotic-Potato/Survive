@@ -19,7 +19,15 @@ var Tile = function(x, y, alt, rng, resourceRates) {
 		}
 	}
 	if (resources.length > 0) {
-		resource = new Blocks.Resource[resources[Math.floor(rng.get() * resources.length)]].get()
+		resource = new Blocks.Resource[resources[Math.floor(rng.get() * resources.length)]].get(this)
 	}
 	this.block = resource
+}
+
+Tile.prototype = {
+	interact: function() {
+		if (this.block) {
+			this.block.interact()
+		}
+	}
 }

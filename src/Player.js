@@ -16,7 +16,7 @@ var Player = {
 			}
 		}
 		return out
-	})(4, 5),
+	})(1, 5),
 	tick: function() {
 		let dir = [0, 0]
 		let keys = {
@@ -44,6 +44,39 @@ var Player = {
 				$P.x = Math.floor($P.x) + 0.5
 			}
 		}
+	},
+	pickUp: function(e) {
+		for (i in $P.inventory) {
+			for (j in $P.inventory[i]) {
+				if (e.same($P.inventory[i][j])) {
+					if ($P.inventory[i][j].amount + e.amount <= e.maxAmount) {
+						$P.inventory[i][j].amount += e.amount
+						return
+					}
+					else {
+						e.amount = $P.inventory[i][j].amount + e.amount - e.maxAmount 
+						$P.inventory[i][j].amount = e.maxAmount
+					}
+				}
+			}
+		}
+		for (i in $P.inventory) {
+			for (j in $P.inventory[i]) {
+				if ($P.inventory[i][j] == null) {
+					$P.inventory[i][j] = e
+					return
+				}
+			}
+		}
+		$P.drop(e)
+	},
+	drop: function(e) {
+		console.log(e)
+	},
+	interact(x, y) {
+		if (dist(x - $P.x, y - $P.y) <= 5) {
+			$G.map.tiles[mod(x, $G.map.width)][mod(y, $G.map.height)].interact()
+		}		
 	},
 	getSpeed: function() {
 		return ($G.map.tiles[mod(Math.round($P.x), $G.map.width)][mod(Math.round($P.y), $G.map.height)].texture == "water" ? 2 : 5)

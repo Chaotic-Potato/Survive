@@ -89,7 +89,10 @@ var Render = {
 		$R.drawRect(x + 4, y + 4, 72, 72, "#888")
 		$R.drawRect(x + 8, y + 8, 64, 64, "#777")
 		if (item != null) {
-			$R.drawImage(item.texture, x + 4, y + 4, 32, 32)
+			$R.drawImage("item/" + item.texture, x + 8, y + 8, 64, 64)
+			if (item.amount > 1) {
+				$R.drawText(item.amount, x + 68, y + 68, "#FFF", "16px Monospace", "right")
+			}
 		}
 	},
 	drawHotbar: function() {

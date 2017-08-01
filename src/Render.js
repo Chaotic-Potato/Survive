@@ -141,9 +141,25 @@ var Render = {
 		}
 	},
 	drawInventory: function() {
-		for (let i = 1; i < $P.inventory.length; i++) {
+		for (let i = 0; i < $P.inventory.length; i++) {
 			for (j in $P.inventory[i]) {
-				$R.drawItemSlot($R.getWidth() / 2 + ((j - ($P.inventory[0].length / 2)) * 88), 16 + (i - 1) * 88, $P.inventory[i][j])
+				let x = $R.getWidth() / 2 + ((j - ($P.inventory[0].length / 2)) * 88)
+				let y = 16 + i * 88
+				$R.drawItemSlot(x, y, $P.inventory[i][j])
+				const m = i
+				const n = j
+				$R.clickboxes.push({
+					x: x,
+					y: y,
+					w: 80,
+					h: 80,
+					df: function(b) {
+						$P.invMDown(m, n, b)
+					},
+					uf: function(b) {
+						$P.invMUp(m, n)	
+					}
+				})
 			}
 		}
 	}

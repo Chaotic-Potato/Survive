@@ -33,7 +33,7 @@ var Player = {
 				dir[1] += keys[i][1]
 			}
 		}
-		let mult = $P.getSpeed() / TICK_RATE / dist(dir[0], dir[1])
+		let mult = !$R.menu * $P.getSpeed() / TICK_RATE / dist(dir[0], dir[1])
 		$P.x = $P.x + (mult * dir[0] || 0)
 		$P.y = $P.y + (mult * dir[1] || 0)
 		if (($G.map.tiles[mod(Math.round($P.x), $G.map.width)][mod(Math.round($P.y), $G.map.height)].block || {clip: false}).clip) {
@@ -43,7 +43,7 @@ var Player = {
 				$P.y = Math.floor($P.y) + 0.5
 			}
 			else {
-				$P.x = Math.floor($P.x) + 0.5
+				$P.x = Math.round($P.x) + 0.5
 			}
 		}
 	},
@@ -160,7 +160,7 @@ var Player = {
 	},
 	getCanCraft: function(r) {
 		let ings = $P.getIngs()
-		let tools = ["hand"]
+		let tools = ($R.menu ? [$R.menu.tool] : [])
 		return Recipes.filter(function(e){return e.check(ings, tools)})
 	},
 	craft: function(r) {

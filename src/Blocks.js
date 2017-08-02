@@ -26,7 +26,8 @@ var Blocks = {
 		}
 	},
 	Utility: {
-		Furnace: {get: function(tile) {return new Block("furnace", true, 1, function(e){}, ["Utility", "Furnace"], 1, 1, tile)}},
-		Workbench:{get: function(tile) {return new Block("workbench", true, 1, function(e){}, ["Utility", "Workbench"], 1, 1, tile)}}
+		Furnace: {get: function(tile) {return new Block("furnace", true, 1, function(e){$R.toggleMenu("furnace")}, ["Utility", "Furnace"], 1, 1, tile)}},
+		Workbench:{get: function(tile) {return new Block("workbench", true, 1, function(e){$R.toggleMenu("workbench")}, ["Utility", "Workbench"], 1, 1, tile)}},
+		Anvil:{get: function(tile) {return new Block("anvil", true, 1, function(e){$R.toggleMenu("anvil")}, ["Utility", "Anvil"], 1, 1, tile)}}
 	}
 }

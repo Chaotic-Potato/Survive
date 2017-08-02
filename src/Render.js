@@ -5,7 +5,22 @@ var Render = {
 	start: new Date().getTime(),
 	menu: null,
 	menus: {
-		inventory: "drawInventory"
+		inventory: {
+			func: "drawInventory",
+			tool: "hand"
+		},
+		workbench: {
+			func: "drawInventory",
+			tool: "workbench"
+		},
+		furnace: {
+			func: "drawInventory",
+			tool: "furnace"
+		},
+		anvil: {
+			func: "drawInventory",
+			tool: "anvil"
+		}
 	},
 	getWidth: function() {
 		return window.innerWidth
@@ -41,10 +56,8 @@ var Render = {
 	},
 	loadMenu: function(name) {
 		if ($R.menus[name]) {
-			$R.menu = {
-				name: name,
-				func: $R.menus[name]
-			}
+			$R.menu = clone($R.menus[name])
+			$R.menu.name = name
 		}
 	},
 	toggleMenu: function(name) {

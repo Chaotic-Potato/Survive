@@ -160,8 +160,8 @@ var Player = {
 	},
 	getCanCraft: function(r) {
 		let ings = $P.getIngs()
-		let tools = ($R.menu ? [$R.menu.tool] : [])
-		return Recipes.filter(function(e){return e.check(ings, tools)})
+		let stations = ($R.menu ? [$R.menu.station] : [])
+		return Recipes.filter(function(e){return e.check(ings, stations)})
 	},
 	craft: function(r) {
 		let ings = clone(r.ings)

@@ -7,19 +7,27 @@ var Render = {
 	menus: {
 		inventory: {
 			func: "drawInventory",
-			tool: "hand"
+			station: "hand"
 		},
 		workbench: {
 			func: "drawInventory",
-			tool: "workbench"
+			station: "workbench"
 		},
 		furnace: {
 			func: "drawInventory",
-			tool: "furnace"
+			station: "furnace"
 		},
 		anvil: {
 			func: "drawInventory",
-			tool: "anvil"
+			station: "anvil"
+		},
+		blast_furnace: {
+			func: "drawInventory",
+			station: "blast_furnace"
+		},
+		steel_anvil: {
+			func: "drawInventory",
+			station: "steel_anvil"
 		}
 	},
 	getWidth: function() {

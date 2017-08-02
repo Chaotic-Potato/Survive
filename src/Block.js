@@ -1,4 +1,4 @@
-var Block = function(texture, clip, size, onInt, itemGiven, itemAmount, hp, tile) {
+var Block = function(texture, clip, size, onInt, itemGiven, itemAmount, hp, tool, tile) {
 	this.texture = texture
 	this.clip = clip
 	this.size = size
@@ -6,6 +6,7 @@ var Block = function(texture, clip, size, onInt, itemGiven, itemAmount, hp, tile
 	this.itemGiven = itemGiven
 	this.itemAmount = itemAmount
 	this.hp = hp
+	this.tool = tool
 	this.tile = tile
 }
 
@@ -26,7 +27,7 @@ Block.prototype = {
 				this.onInt(this)
 				break
 			case 2:
-				this.damage(1)
+				this.damage(($P.inventory[0][$P.hotSelect] && $P.inventory[0][$P.hotSelect].tool == this.tool ? $P.inventory[0][$P.hotSelect].damage : 1))
 		}
 	}
 }

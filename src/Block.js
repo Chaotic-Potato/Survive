@@ -1,7 +1,8 @@
-var Block = function(texture, clip, size, onInt, itemGiven, itemAmount, hp, tool, tile) {
+var Block = function(texture, clip, size, under, onInt, itemGiven, itemAmount, hp, tool, tile) {
 	this.texture = texture
 	this.clip = clip
 	this.size = size
+	this.under = under
 	this.onInt = onInt || function(e){}
 	this.itemGiven = itemGiven
 	this.itemAmount = itemAmount

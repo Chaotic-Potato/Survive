@@ -34,7 +34,7 @@ Tile.prototype = {
 		else if (this.block) {
 			this.block.interact(b)
 		}
-		else if (i && i.block) {
+		else if (i && b == 0 && i.block) {
 			this.block = Blocks[i.block[0]][i.block[1]].get(this)
 			return true
 		}

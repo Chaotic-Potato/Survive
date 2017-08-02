@@ -28,6 +28,10 @@ var Render = {
 		steel_anvil: {
 			func: "drawInventory",
 			station: "steel_anvil"
+		},
+		bed: {
+			func: "drawSleep",
+			station: "bed"
 		}
 	},
 	getWidth: function() {
@@ -50,10 +54,10 @@ var Render = {
 		$R.clear()
 		$R.drawTiles()
 		$R.blocks.sort(function(a, b){return (a.y != b.y ? a.y > b.y : (a.size != b.size ? a.size > b.size : a.x > b.x)) * 2 - 1})
-		$R.blocks.filter(function(e){return e.y < $P.y}).forEach(function(e){$R.drawBlock(e.x, e.y)})
+		$R.blocks.filter(function(e){return e.y < $P.y || e.under}).forEach(function(e){$R.drawBlock(e.x, e.y)})
 		$R.items.filter(function(e){return e.y < $P.y}).forEach(function(e){$R.drawGroundItem(e.x, e.y)})
 		$R.drawPlayer()
-		$R.blocks.filter(function(e){return e.y >= $P.y}).forEach(function(e){$R.drawBlock(e.x, e.y)})
+		$R.blocks.filter(function(e){return e.y >= $P.y && !e.under}).forEach(function(e){$R.drawBlock(e.x, e.y)})
 		$R.items.filter(function(e){return e.y >= $P.y}).forEach(function(e){$R.drawGroundItem(e.x, e.y)})
 		$R.drawHUD()
 		$R.drawHotbar()
@@ -173,7 +177,7 @@ var Render = {
 		}
 		let c = 0
 		for (i in colors) {
-			$R.drawBar((c % 2 ? 16 : $R.getWidth() - 288), $R.getHeight() - 64 * (Math.floor(c / 2) + 1), colors[i], $P.stats[i], i.toUpperCase())
+			$R.drawBar((c % 2 ? 16 : $R.getWidth() - 288), $R.getHeight() - 64 * (Math.floor(c / 2) + 1), colors[i], Math.round($P.stats[i]) / 100, i.toUpperCase())
 			c++
 		}
 	},
@@ -223,6 +227,9 @@ var Render = {
 				z++
 			}
 		}
+	},
+	drawSleep: function() {
+		$R.drawRect(0, 0, $R.getWidth(), $R.getHeight(), "rgba(0, 0, 0, 0.3)")
 	}
 }
 

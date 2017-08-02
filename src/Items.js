@@ -5,7 +5,7 @@ var Items = {
 		IronOre: function(amount){return new Item("iron_ore", amount, 250)},
 		CopperOre: function(amount){return new Item("copper_ore", amount, 250)},
 		UraniumOre: function(amount){return new Item("uranium_ore", amount, 150)},
-		Wood: function(amount){return new Item("wood", amount, 500)},
+		Wood: function(amount){return new Item("wood", amount, 500, null, null, ["Furniture", "Wood"])},
 	},
 	Material: {
 		CopperIngot: function(amount){return new Item("copper_ingot", amount, 100)},
@@ -19,6 +19,10 @@ var Items = {
 		BlastFurnace: function(amount){return new Item("blast_furnace", amount, 1, null, null, ["Utility", "BlastFurnace"])},
 		SteelAnvil: function(amount){return new Item("steel_anvil", amount, 1, null, null, ["Utility", "SteelAnvil"])}
 
+	},
+	Furniture: {
+		WoodFloor: function(amount){return new Item("wood_floor", amount, 500, null, null, ["Furniture", "WoodFloor"])},
+		Bed: function(amount){return new Item("bed", amount, 1, null, null, ["Furniture", "Bed"])}
 	},
 	Tool: {
 		CopperPick: function(amount){return new Item("copper_pick", amount, 1, "pick", 3)},

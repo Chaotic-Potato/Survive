@@ -13,12 +13,12 @@ Item.prototype = {
 			return false
 		}
 		for (let i in e) {
-			if (i != "amount" && e[i] != this[i]) {
+			if ((i != "amount" && e[i] != this[i]) && (i != "block" || e[i][0] != this[i][0] || e[i][1] != e[i][1])) {
 				return false
 			}
 		}
 		for (let i in this) {
-			if (i != "amount" && e[i] != this[i]) {
+			if ((i != "amount" && e[i] != this[i]) && (i != "block" || e[i][0] != this[i][0] || e[i][1] != e[i][1])) {
 				return false
 			}
 		}

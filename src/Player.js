@@ -2,10 +2,10 @@ var Player = {
 	x: 0,
 	y: 0,
 	stats: {
-		hp: 1,
-		food: 1,
-		h2o: 1,
-		rest: 1
+		hp: 100,
+		food: 100,
+		h2o: 100,
+		rest: 100
 	},
 	selected: null,
 	hotSelect: 0,
@@ -44,6 +44,14 @@ var Player = {
 			}
 			else {
 				$P.x = Math.round($P.x) + 0.5
+			}
+		}
+
+		$P.stats.rest += ($R.menu && $R.menu.name == "bed" ? 5 / TICK_RATE : (-1 / 36) * (dist(dir[0], dir[1]) == 0 || mult == 0 ? 1 : 3) / TICK_RATE)
+		for (let i in $P.stats) {
+			$P.stats[i] = Math.max(0, Math.min(100, $P.stats[i]))
+			if ($P.stats[i] <= 0) {
+				$P.die()
 			}
 		}
 	},

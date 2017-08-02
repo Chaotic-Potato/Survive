@@ -33,6 +33,12 @@ var Recipes = [
 		coal: 3
 	}, Items.Material.SteelIngot, 1, "blast_furnace"),
 	new Recipe({
+		wood: 1
+	}, Items.Furniture.WoodFloor, 5, "workbench"),
+	new Recipe({
+		wood: 100
+	}, Items.Furniture.Bed, 1, "workbench"),
+	new Recipe({
 		copper_ingot: 5,
 		wood: 10,
 	}, Items.Tool.CopperPick, 1, "anvil"),

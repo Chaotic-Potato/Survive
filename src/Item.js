@@ -1,7 +1,9 @@
-var Item = function(name, amount, maxAmount, block) {
+var Item = function(name, amount, maxAmount, tool, damage, block) {
 	this.name = name
 	this.amount = amount
 	this.maxAmount = maxAmount
+	this.tool = tool
+	this.damage = damage
 	this.block = block
 }
 
